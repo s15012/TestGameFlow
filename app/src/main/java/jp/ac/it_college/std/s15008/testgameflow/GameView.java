@@ -1,5 +1,6 @@
 package jp.ac.it_college.std.s15008.testgameflow;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import jp.ac.it_college.std.s15008.testgameflow.Mode.ClearMode;
 import jp.ac.it_college.std.s15008.testgameflow.Mode.GameMode;
 import jp.ac.it_college.std.s15008.testgameflow.Mode.IntroMode;
 
@@ -31,6 +33,7 @@ public class GameView extends View {
     // モードのオブジェクト
     private IntroMode mIntroMode;
     private GameMode mGameMode;
+    private ClearMode mClearMode;
 
     // タッチ座標
     private float mTouchX;
@@ -49,6 +52,7 @@ public class GameView extends View {
         mMode = Mode.INTRO;
         mGameMode = new GameMode();
         mIntroMode = new IntroMode();
+        mClearMode = new ClearMode();
 
         // タッチイベント関係
         mTouchX = 0f;
@@ -59,13 +63,13 @@ public class GameView extends View {
         // 背景色変更
         setBackgroundColor(Color.WHITE);
 
+
         // デバッグ用
         paintText = new Paint();
         paintText.setColor(Color.RED);
         paintText.setTextSize(50);
         paintText.setTextAlign(Paint.Align.CENTER);
     }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -84,6 +88,7 @@ public class GameView extends View {
             // モード遷移
             if (mIntroMode.mNextMode != mIntroMode.mCurrentMode) {
                 mMode = mIntroMode.mNextMode;
+                mIntroMode.mNextMode  = mIntroMode.mCurrentMode;
                 invalidate();
             }
         } else if (mMode == Mode.GAME) {
@@ -91,6 +96,15 @@ public class GameView extends View {
         } else if (mMode == Mode.OVER) {
             Log.d(TAG, "ゲームオーバーモード");
         } else if (mMode == Mode.CLEAR) {
+            mClearMode.draw(canvas);
+            mClearMode.update();
+
+
+            if (mClearMode.mNextMode != mClearMode.mCurrentMode) {
+                mMode = mClearMode.mNextMode;
+                mClearMode.mNextMode = mClearMode.mCurrentMode;
+                invalidate();
+            }
             Log.d(TAG, "ゲームクリアーモード");
         }
 

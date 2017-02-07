@@ -73,7 +73,7 @@ public class IntroMode {
                 mTouchX = touchX;
                 mTouchY = touchY;
                 if (mMyButton.mRect.contains((int) mTouchX, (int) mTouchY)) {
-                    mNextMode = GameView.Mode.GAME;
+                    mNextMode = GameView.Mode.CLEAR;
                 }
             } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                 mTouchX = touchX;
